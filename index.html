@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>crusader.is-a.dev</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+  :root {
+    --bg: #0a0d13;
+    --panel-border: #2c2c33;
+    --panel-border-highlight: #5b9dd9;
+    --text: #b8bcc2;
+    --text-dim: #5c6066;
+    --accent: #6fb0e8;
+    --accent-dim: #3d7bab;
+    --px: 3px; /* pixel unit for borders/shadows */
+  }
+
+  * { box-sizing: border-box; }
+  *, *::before, *::after { image-rendering: pixelated; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #0a0d13;
+    color: var(--text);
+    font-family: 'VT323', ui-monospace, monospace;
+  }
+
+  body {
+    padding: 48px 24px 24px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    font-size: 1.25rem;
+  }
+
+  .wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
+  }
+
+  .domain-link {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--accent);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 2.3rem;
+    letter-spacing: 1px;
+    line-height: 1.4;
+    margin: 0 0 40px 4px;
+    transition: text-shadow 0.15s steps(2), transform 0.15s ease, color 0.15s ease;
+    text-shadow:
+      3px 3px 0 var(--accent-dim),
+      3px 3px 0 rgba(0,0,0,0.4);
+  }
+
+  .domain-link:hover,
+  .domain-link:focus-visible {
+    color: #cfe4f7;
+    text-shadow:
+      3px 0 0 var(--accent-dim),
+      -3px 0 0 #2a4256,
+      3px 3px 0 rgba(0,0,0,0.6);
+    transform: translate(-1px, -2px);
+  }
+
+  .domain-link:active {
+    transform: translate(1px, 1px);
+    text-shadow: 1px 1px 0 var(--accent-dim);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .grid-secondary {
+    display: grid;
+    grid-template-columns: 0.9fr 1fr 1.1fr;
+    gap: 20px;
+  }
+
+  .box {
+    position: relative;
+    border: var(--px) solid var(--panel-border);
+    border-radius: 0;
+    padding: 26px 20px 20px;
+    transition: border-color 0.15s steps(2), box-shadow 0.15s steps(2), transform 0.15s ease;
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
+  }
+
+  .box:hover {
+    border-color: var(--panel-border-highlight);
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.7), 0 0 0 var(--px) rgba(111, 176, 232, 0.15);
+    transform: translate(-2px, -2px);
+  }
+
+  .box-title {
+    position: absolute;
+    top: -14px;
+    left: 14px;
+    background: var(--bg);
+    padding: 2px 8px;
+    color: var(--accent);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+  }
+
+  .box.achievements {
+    border-color: var(--accent-dim);
+  }
+  .box.achievements:hover {
+    border-color: var(--accent);
+  }
+
+  p { margin: 0 0 16px; line-height: 1.5; font-size: 1.35rem; color: var(--text); }
+  p:last-child { margin-bottom: 0; }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: var(--px) dashed transparent;
+    transition: border-color 0.15s steps(2), color 0.15s ease, text-shadow 0.15s steps(2);
+  }
+  a:hover, a:focus-visible {
+    border-bottom-color: var(--accent);
+    color: #cfe4f7;
+    text-shadow: 2px 0 0 var(--accent-dim), -2px 0 0 #2a4256;
+  }
+
+  .social-row {
+    display: flex;
+    gap: 28px;
+    margin: 4px 0 16px;
+    flex-wrap: wrap;
+  }
+
+  .pgp-toggle {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }
+  .pgp-toggle .arrow { transition: transform 0.2s ease; display: inline-block; }
+  .pgp-toggle.open .arrow { transform: rotate(90deg); }
+
+  ul.hobbies {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  ul.hobbies li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 6px;
+    border-radius: 0;
+    font-size: 1.35rem;
+    cursor: default;
+    transition: background 0.1s steps(2), padding-left 0.1s steps(3), color 0.1s;
+    border-left: var(--px) solid transparent;
+  }
+  ul.hobbies li:hover {
+    background: rgba(111, 176, 232, 0.08);
+    padding-left: 14px;
+    border-left-color: var(--accent);
+    color: var(--accent);
+  }
+  ul.hobbies li .emoji { font-size: 1.1rem; filter: saturate(1.1); }
+
+  .achievement {
+    margin-bottom: 18px;
+    padding: 6px 8px;
+    border-radius: 0;
+    transition: background 0.1s steps(2);
+  }
+  .achievement:hover { background: rgba(111, 176, 232, 0.08); }
+  .achievement:last-child { margin-bottom: 0; }
+  .achievement .title {
+    color: var(--accent);
+    display: block;
+    margin-bottom: 3px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.62rem;
+    line-height: 1.6;
+    letter-spacing: 0.5px;
+  }
+  .achievement .rank { color: var(--text); font-size: 1.3rem; }
+
+  .project {
+    margin-bottom: 20px;
+    padding: 6px 8px;
+    border-radius: 0;
+    transition: background 0.1s steps(2);
+    font-size: 1.35rem;
+  }
+  .project:hover { background: rgba(111, 176, 232, 0.08); }
+  .project:last-child { margin-bottom: 0; }
+  .project .name { color: var(--accent); }
+
+  footer {
+    text-align: center;
+    margin-top: 36px;
+    padding-top: 22px;
+    border-top: var(--px) solid var(--panel-border);
+    color: var(--text-dim);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  @media (max-width: 760px) {
+    .grid, .grid-secondary { grid-template-columns: 1fr; }
+    .domain-link { font-size: 1.7rem; }
+    .box { box-shadow: 4px 4px 0 rgba(0,0,0,0.5); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="domain-link" href="https://crusader.is-a.dev" title="Forward to crusader.is-a.dev">crusader.is-a.dev</a>
+
+  <div class="grid">
+    <div class="box">
+      <span class="box-title">intro</span>
+      <p>Živim u Rijeci, pohađam GAM.</p>
+      <p>Volim Javu, Python, C++, kemiju i matematiku. Zanima me kibernetička sigurnost te volim CTF zadatke iako sam idalje početnik.</p>
+      <p>Uvijek nastojim biti što korisniji član društva, kreirajući nove i korisne softverske alate za druge</p>
+    </div>
+
+    <div class="box">
+      <span class="box-title">social</span>
+      <p>Možeš me pronaći na društvenim mrežama:</p>
+      <div class="social-row">
+        <a href="#" title="Discord: karlosars">discord</a>
+        <a href="https://github.com/Karlo1104" target="_blank" rel="noopener">github</a>
+      </div>
+      <p>Drago mi je poslušati ako nekome treba pomoć s bilo čime ili samo žele pričati pa slobodno.</p>
+      <p>Ako postoji potreba, također mi možeš poslati mail: <a href="mailto:saki@crusader.is-a.dev">saki@crusader.is-a.dev</a></p>
+      </div>
+  </div>
+
+  <div class="grid-secondary">
+    <div class="box">
+      <span class="box-title">hobiji</span>
+      <ul class="hobbies">
+        <li><span class="emoji">🚩</span> CTF</li>
+        <li><span class="emoji">💻</span> Java/Python/C++</li>
+        <li><span class="emoji">🎮</span> gaming</li>
+      </ul>
+    </div>
+
+    <div class="box achievements">
+      <span class="box-title">postignuća</span>
+      <div class="achievement">
+        <span class="title">Razvoj Softwarea 2026.</span>
+        <span class="rank">3. mjesto (tim Evalogotor)</span>
+      </div>
+    </div>
+
+    <div class="box">
+      <span class="box-title">projekti</span>
+      <div class="project">
+        <a class="name" href="https://evalogotor.vercel.app/" target="_blank" rel="noopener">evalogotor.vercel.app</a> <a href="#" target="_blank" rel="noopener">(source)</a> - web stranica za razvijanje i natjecanje u zadacima za progrmski jezik FMSLogo
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>© 2026 crusader.is-a.dev</footer>
+
+<script>
+  document.getElementById('pgpToggle').addEventListener('click', function(e) {
+    this.classList.toggle('open');
+  });
+</script>
+</body>
+</html>
